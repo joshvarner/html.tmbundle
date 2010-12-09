@@ -823,16 +823,61 @@
 		</dict>
 		<key>tag-generic-attribute</key>
 		<dict>
-			<key>match</key>
-			<string>\b([a-zA-Z\-:]+)</string>
-			<key>name</key>
-			<string>entity.other.attribute-name.html</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>\b([^\s"'&lt;&gt;\/=]+)=(?=[^\s"'=&lt;&gt;`\/]|(\&lt;[\?%]))</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.other.attribute-name.html</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>$|(?=[\s=&gt;'"`\/]|(\&lt;[^\?%]))</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>begin</key>
+							<string>(?=[^\s"'=&lt;&gt;`\/]|(\&lt;[\?%]))</string>
+							<key>end</key>
+							<string>$|(?=[\s"'=&gt;`\/]|(\&lt;[^\?%]))</string>
+							<key>name</key>
+							<string>string.unquoted.html</string>
+							<key>patterns</key>
+							<array>
+								<dict>
+									<key>include</key>
+									<string>#embedded-code</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>#entities</string>
+								</dict>
+								<dict>
+									<key>match</key>
+									<string>[^\s"'=&lt;&gt;`\/]+</string>
+								</dict>
+							</array>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b([^\s"'&lt;&gt;\/=]+)</string>
+					<key>name</key>
+					<string>entity.other.attribute-name.html</string>
+				</dict>
+			</array>
 		</dict>
 		<key>tag-id-attribute</key>
 		<dict>
 			<key>begin</key>
-			<string>\b(id)\b\s*(=)</string>
-			<key>captures</key>
+			<string>(?i)\b(id)\b\s*(=)(?=(\s*["'])|([^\s"'=&lt;&gt;`\/]|(\&lt;[\?%])))</string>
+			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
@@ -846,7 +891,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(?&lt;='|")</string>
+			<string>$|(?=[\s=&gt;`\/]|(\&lt;[^\?%]))</string>
 			<key>name</key>
 			<string>meta.attribute-with-value.id.html</string>
 			<key>patterns</key>
@@ -922,6 +967,31 @@
 						<dict>
 							<key>include</key>
 							<string>#entities</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?=[^\s"'=&lt;&gt;`\/]|(\&lt;[\?%]))</string>
+					<key>contentName</key>
+					<string>meta.toc-list.id.html</string>
+					<key>end</key>
+					<string>$|(?=[\s"'=&gt;`\/]|(\&lt;[^\?%]))</string>
+					<key>name</key>
+					<string>string.unquoted.html</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#embedded-code</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#entities</string>
+						</dict>
+						<dict>
+							<key>match</key>
+							<string>[^\s"'=&lt;&gt;`\/]+</string>
 						</dict>
 					</array>
 				</dict>
